@@ -1,0 +1,34 @@
+version: "3"
+services:
+  app:
+    build: .
+    volumes: 
+      - .:/var/www/myapp
+    command: rails s -p 8000 -b '0.0.0.0'
+    ports: 
+      - 13000:8000
+    links: 
+      - db
+      - db-test
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - TZ=${TZ}
+    ports: 
+      - 23306:3306
+
+  db-test:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=${DB_TEST_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - TZ=${TZ}
+    ports: 
+      - 33306:3306
